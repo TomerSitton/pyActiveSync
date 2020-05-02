@@ -17,7 +17,7 @@
 #  MA  02110-1301, USA.
 ########################################################################
 
-import httplib, urllib
+import http.client, urllib.request, urllib.parse, urllib.error
 
 class ASHTTPConnector(object):
     """ActiveSync HTTP object"""
@@ -42,15 +42,16 @@ class ASHTTPConnector(object):
     def set_credential(self, username, password):
         import base64
         self.username = username
-        self.credential = base64.b64encode(username+":"+password)
-        self.headers.update({"Authorization" : "Basic " + self.credential})
+        data = username+":"+password
+        self.credential = base64.b64encode(data.encode('ascii'))
+        self.headers.update({"Authorization" : "Basic " + self.credential.decode('ascii')})
 
     def do_post(self, url, body, headers, redirected=False):
         if self.ssl:
-            conn = httplib.HTTPSConnection(self.server, self.port)
+            conn = http.client.HTTPSConnection(self.server, self.port)
             conn.request("POST", url, body, headers)
         else:
-            conn = httplib.HTTPConnection(self.server, self.port)
+            conn = http.client.HTTPConnection(self.server, self.port)
             conn.request("POST", url, body, headers)
         res = conn.getresponse()
         if res.status == 451:
@@ -100,7 +101,7 @@ class ASHTTPConnector(object):
         return res.read(), res.status, content_type
 
     def options(self):
-        conn = httplib.HTTPSConnection(self.server, self.port)
+        conn = http.client.HTTPSConnection(self.server, self.port)
         conn.request("OPTIONS","/Microsoft-Server-ActiveSync", None, self.headers)
         res = conn.getresponse()
         if res.status is 200:
@@ -109,10 +110,10 @@ class ASHTTPConnector(object):
             self._server_version = res.getheader("ms-server-activesync")
             return True
         else:
-            print "Connection Error!:"
-            print res.status, res.reason
+            print("Connection Error!:")
+            print(res.status, res.reason)
             for header in res.getheaders():
-                print header[0]+":",header[1]
+                print(header[0]+":",header[1])
             return False
 
     def get_policykey(self):

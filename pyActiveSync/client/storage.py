@@ -251,7 +251,7 @@ class storage:
 
     @staticmethod
     def insert_folderhierarchy_change(folder, curs):
-        sql = "INSERT INTO FolderHierarchy VALUES ('%s', '%s', '%s', '%s')""" % (folder.ServerId, folder.ParentId, folder.DisplayName, folder.Type)
+        sql = """INSERT INTO FolderHierarchy VALUES ("%s", "%s", "%s", "%s")""" % (folder.ServerId, folder.ParentId, folder.DisplayName, folder.Type)
         curs.execute(sql)
 
     @staticmethod
@@ -308,7 +308,7 @@ class storage:
         del calendar_dict["server_id"]
         calendar_cols = ""
         calendar_vals = ""
-        for calendar_field in calendar_dict.keys():
+        for calendar_field in list(calendar_dict.keys()):
             calendar_cols += (", '%s'" % calendar_field)
             calendar_vals += (", '%s'"  % repr(calendar_dict[calendar_field]).replace("'","''"))
         sql = "INSERT INTO %s ( 'ServerId' %s ) VALUES ( '%s' %s )" % (table, calendar_cols, server_id, calendar_vals)
@@ -319,7 +319,7 @@ class storage:
         server_id = calendar_dict["server_id"]
         del calendar_dict["server_id"]
         calendar_sql = ""
-        for calendar_field in calendar_dict.keys():
+        for calendar_field in list(calendar_dict.keys()):
             calendar_sql += (", %s='%s' "  % (calendar_field, repr(calendar_dict[calendar_field]).replace("'","''")))
         calendar_sql = calendar_sql.lstrip(", ")
         sql = "UPDATE %s SET %s WHERE ServerId='%s'" % (table, calendar_sql, server_id)

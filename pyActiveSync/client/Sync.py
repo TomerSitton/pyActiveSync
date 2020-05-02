@@ -45,7 +45,7 @@ class Sync:
 
         xml_as_collections_node = wapxmlnode("Collections", xml_as_sync_rootnode)
 
-        for collection_id in collections.keys():
+        for collection_id in list(collections.keys()):
             xml_as_Collection_node = wapxmlnode("Collection", xml_as_collections_node)  #http://msdn.microsoft.com/en-us/library/gg650891(v=exchg.80).aspx
             try:
                 xml_as_SyncKey_node = wapxmlnode("SyncKey", xml_as_Collection_node, synckeys[collection_id])    #http://msdn.microsoft.com/en-us/library/gg663426(v=exchg.80).aspx
@@ -54,17 +54,17 @@ class Sync:
                 
             xml_as_CollectionId_node = wapxmlnode("CollectionId", xml_as_Collection_node, collection_id) #http://msdn.microsoft.com/en-us/library/gg650886(v=exchg.80).aspx
 
-            for parameter in collections[collection_id].keys():
+            for parameter in list(collections[collection_id].keys()):
                 if parameter == "Options":
                     xml_as_Options_node = wapxmlnode(parameter, xml_as_Collection_node)
-                    for option_parameter in collections[collection_id][parameter].keys():
+                    for option_parameter in list(collections[collection_id][parameter].keys()):
                         if option_parameter.startswith("airsync"):
                             for airsyncpref_node in collections[collection_id][parameter][option_parameter]:
                                 xml_as_Options_airsyncpref_node = wapxmlnode(option_parameter.replace("_",":"), xml_as_Options_node)
                                 wapxmlnode("airsyncbase:Type", xml_as_Options_airsyncpref_node, airsyncpref_node["Type"])
                                 tmp = airsyncpref_node["Type"]
                                 del airsyncpref_node["Type"]
-                                for airsyncpref_parameter in airsyncpref_node.keys():
+                                for airsyncpref_parameter in list(airsyncpref_node.keys()):
                                     wapxmlnode("airsyncbase:%s" % airsyncpref_parameter, xml_as_Options_airsyncpref_node, airsyncpref_node[airsyncpref_parameter])
                                 airsyncpref_node["Type"] = tmp
                         elif option_parameter.startswith("rm"):
@@ -114,11 +114,11 @@ class Sync:
                 return parse_task(item), content_class
             elif content_class == "Notes":
                 return parse_note(item), content_class
-        except Exception, e:
+        except Exception as e:
             if collectionid_to_type_dict:
                 return Sync.parse_item(item, collection_id, None)
             else:
-                print e
+                print(e)
                 pass
         raise LookupError("Could not determine content class of item for parsing. \r\n------\r\nItem:\r\n%s" % repr(item))
 
@@ -139,7 +139,7 @@ class Sync:
             raise AttributeError("%s response does not conform to any known %s responses." % (root_tag, root_tag))
         if airsyncbase_sync_children[0].tag == "Status":
             if airsyncbase_sync_children[0].text == "4":
-                print "Sync Status: 4, Protocol Error."
+                print("Sync Status: 4, Protocol Error.")
         if airsyncbase_sync_children[0].tag != "Collections":
             raise AttributeError("%s response does not conform to any known %s responses." % (root_tag, root_tag))
 
@@ -159,11 +159,11 @@ class Sync:
             new_collection = Sync.sync_response_collection()
             while collection_counter < airsyncbase_sync_collection_children_count:
                 if airsyncbase_sync_collection_children[collection_counter].tag == "SyncKey":
-                    new_collection.SyncKey = airsyncbase_sync_collection_children[collection_counter].text
+                    new_collection.SyncKey = int(eval(airsyncbase_sync_collection_children[collection_counter].text))
                 elif airsyncbase_sync_collection_children[collection_counter].tag == "CollectionId":
-                    new_collection.CollectionId = airsyncbase_sync_collection_children[collection_counter].text
+                    new_collection.CollectionId = eval(airsyncbase_sync_collection_children[collection_counter].text).decode('utf-8')
                 elif airsyncbase_sync_collection_children[collection_counter].tag == "Status":
-                    new_collection.Status = airsyncbase_sync_collection_children[collection_counter].text
+                    new_collection.Status = int(eval(airsyncbase_sync_collection_children[collection_counter].text))
                     if new_collection.Status != "1":
                         response.append(new_collection)
                 elif airsyncbase_sync_collection_children[collection_counter].tag == "MoreAvailable":
@@ -185,7 +185,7 @@ class Sync:
                             new_collection.Commands.append(("SoftDelete", airsyncbase_sync_commands_children[commands_counter].get_children()[0].text))
                         commands_counter+=1
                 elif airsyncbase_sync_collection_children[collection_counter].tag == "Responses":
-                    print airsyncbase_sync_collection_children[collection_counter]
+                    print(airsyncbase_sync_collection_children[collection_counter])
                 collection_counter+=1
             response.append(new_collection)
             collections_counter+=1

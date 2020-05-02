@@ -51,5 +51,5 @@ class code_page(object):
     def __iter__(self):
         lnamespace = self.namespace
         lxmlns = self.xmlns
-        for tag, token in self.tags.items():
+        for tag, token in list(self.tags.items()):
             yield (lnamespace, lxmlns, tag, token)

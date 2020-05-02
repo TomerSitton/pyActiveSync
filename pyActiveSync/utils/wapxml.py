@@ -1,4 +1,4 @@
-########################################################################
+ ########################################################################
 #  Copyright (C) 2013 Sol Birnbaum
 # 
 #  This program is free software; you can redistribute it and/or
@@ -49,8 +49,8 @@ class wapxmlnode(object):
         if parent:
             try:
                 self.set_parent(parent)
-            except Exception, e:
-                print e
+            except Exception as e:
+                print(e)
     def set_parent(self, parent):
         parent.add_child(self)
         self._parent = parent

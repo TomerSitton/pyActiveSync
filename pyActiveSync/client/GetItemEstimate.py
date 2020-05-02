@@ -41,13 +41,13 @@ class GetItemEstimate:
             except KeyError:
                 xml_gie_airsyncSyncKey_node = wapxmlnode("airsync:SyncKey", xml_Collection_node, "0") 
             xml_gie_CollectionId_node = wapxmlnode("CollectionId", xml_Collection_node, collection_id)#?
-            if options[collection_id].has_key("ConversationMode"):
+            if "ConversationMode" in options[collection_id]:
                 xml_gie_ConverationMode_node = wapxmlnode("airsync:ConversationMode", xml_Collection_node, options[collection_id]["ConversationMode"])#?
             xml_gie_airsyncOptions_node = wapxmlnode("airsync:Options", xml_Collection_node)
             xml_gie_airsyncClass_node = wapxmlnode("airsync:Class", xml_gie_airsyncOptions_node, options[collection_id]["Class"]) #STR #http://msdn.microsoft.com/en-us/library/gg675489(v=exchg.80).aspx
-            if options[collection_id].has_key("FilterType"):
+            if "FilterType" in options[collection_id]:
                 xml_gie_airsyncFilterType_node = wapxmlnode("airsync:FilterType", xml_gie_airsyncOptions_node, options[collection_id]["FilterType"])   #INT #http://msdn.microsoft.com/en-us/library/gg663562(v=exchg.80).aspx
-            if options[collection_id].has_key("MaxItems"):
+            if "MaxItems" in options[collection_id]:
                 xml_gie_airsyncMaxItems_node = wapxmlnode("airsync:MaxItems", xml_gie_airsyncMaxItems_node, options[collection_id]["MaxItems"]) #OPTIONAL  #INT   #http://msdn.microsoft.com/en-us/library/gg675531(v=exchg.80).aspx
         return getitemestimate_xmldoc_req
         
@@ -72,19 +72,20 @@ class GetItemEstimate:
         for getitemestimate_response_child in getitemestimate_getitemestimate_children:
             response = GetItemEstimate.getitemestimate_response()
             if getitemestimate_response_child.tag is "Status":
-                response.Status = getitemestimate_response_child.text
+                response.Status = eval(getitemestimate_response_child.text).decode('utf-8')
             for element in getitemestimate_response_child:
                 if element.tag is "Status":
-                    response.Status = element.text
+                    #response.Status = element.text
+                    response.Status = eval(element.text).decode('utf-8')
                 elif element.tag == "Collection":
                     getitemestimate_collection_children = element.get_children()
                     collection_id = 0
                     estimate = 0
                     for collection_child in getitemestimate_collection_children:
                         if collection_child.tag == "CollectionId":
-                            response.CollectionId = collection_child.text
+                            response.CollectionId = eval(collection_child.text).decode('utf-8')
                         elif collection_child.tag == "Estimate":
-                            response.Estimate = collection_child.text
+                            response.Estimate =  eval(collection_child.text).decode('utf-8')
             responses.append(response)
         return responses
 

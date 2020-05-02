@@ -18,7 +18,7 @@
 ########################################################################
 
 
-from wapxml import wapxmltree, wapxmlnode
+from .wapxml import wapxmltree, wapxmlnode
 
 class wbxml_parser(object):
     """WBXML Parser"""
@@ -84,7 +84,6 @@ class wbxml_parser(object):
         wbxml_bytes.append(token_tag)
 
         current_node = inwapxml.get_root()
-
         if current_node.has_children():
             for child in current_node.get_children():
                 self.encode_node_recursive(child, wbxml_bytes)
@@ -210,12 +209,12 @@ class wbxml_parser(object):
     # encode helper functions
     def encode_xmlns_as_codepage(self, inxmlns_or_namespace):
         lc_inxmlns = inxmlns_or_namespace.lower()
-        for cp_index, code_page in self.code_pages.items():
+        for cp_index, code_page in list(self.code_pages.items()):
             if code_page.xmlns == lc_inxmlns:
                 return cp_index
-        if inxmlns_or_namespace in self.cp_shorthand.keys():
+        if inxmlns_or_namespace in list(self.cp_shorthand.keys()):
             lc_inxmlns = self.cp_shorthand[inxmlns_or_namespace].lower()
-            for cp_index, code_page in self.code_pages.items():
+            for cp_index, code_page in list(self.code_pages.items()):
                 if code_page.xmlns == lc_inxmlns:
                     return cp_index
         raise IndexError("No such code page exists in current object")
@@ -223,7 +222,7 @@ class wbxml_parser(object):
     def encode_string(self, string):
         string = str(string)
         retarray = bytearray(string, "utf-8")
-        retarray.append("\x00")
+        retarray.append(0x00)
         return retarray
 
     def encode_string_as_opaquedata(self, string):

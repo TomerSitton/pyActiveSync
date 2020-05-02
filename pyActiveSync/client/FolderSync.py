@@ -10,7 +10,7 @@
 #  but WITHOUT ANY WARRANTY; without even the implied warranty of
 #  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #  GNU General Public License for more details.
-# 
+# a
 #  You should have received a copy of the GNU General Public License
 #  along with this program; if not, write to the Free Software
 #  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
@@ -58,14 +58,14 @@ class FolderSync:
 
         for element in folderhierarchy_foldersync_children:
             if element.tag is "Status":
-                folderhierarchy_foldersync_status = element.text
-                if folderhierarchy_foldersync_status != "1":
-                    print "FolderSync Exception: %s" % folderhierarchy_foldersync_status
+                folderhierarchy_foldersync_status = eval(element.text).decode('utf-8')
+                if folderhierarchy_foldersync_status != '1':
+                    print("FolderSync Exception: %s" % folderhierarchy_foldersync_status)
             elif element.tag == "SyncKey":
-                folderhierarchy_foldersync_synckey = element.text
+                folderhierarchy_foldersync_synckey = eval(element.text).decode('utf-8')
             elif element.tag == "Changes":
                 folderhierarchy_foldersync_changes = element.get_children()
-                folderhierarchy_foldersync_changes_count = int(folderhierarchy_foldersync_changes[0].text)
+                folderhierarchy_foldersync_changes_count = int(eval(folderhierarchy_foldersync_changes[0].text))
                 if folderhierarchy_foldersync_changes_count > 0:
                     for change_index in range(1, folderhierarchy_foldersync_changes_count+1):
                         folderhierarchy_foldersync_change_element = folderhierarchy_foldersync_changes[change_index]
@@ -73,12 +73,12 @@ class FolderSync:
                         new_change = FolderHierarchy.Folder()
                         for element in folderhierarchy_foldersync_change_childern:
                             if element.tag == "ServerId":
-                                new_change.ServerId = element.text
+                                new_change.ServerId = eval(element.text).decode('utf-8')
                             elif element.tag == "ParentId":
-                                new_change.ParentId = element.text
+                                new_change.ParentId = eval(element.text).decode('utf-8')
                             elif element.tag == "DisplayName":
-                                new_change.DisplayName = element.text
+                                new_change.DisplayName = eval(element.text).decode('utf-8')
                             elif element.tag == "Type":
-                                new_change.Type = element.text
+                                new_change.Type = eval(element.text).decode('utf-8')
                         changes.append((folderhierarchy_foldersync_change_element.tag, new_change))
         return (changes, folderhierarchy_foldersync_synckey, folderhierarchy_foldersync_status)
