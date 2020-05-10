@@ -19,6 +19,15 @@
 
 """[MS-ASAIRS] AirSyncBase namespace objects"""
 
+"""
+Exchange ActiveSync: AirSyncBase Namespace Protocol.
+
+Specifies the Exchange ActiveSync: AirSyncBase Namespace Protocol, which is used by the Exchange ActiveSync commands 
+to identify the size, type, and content of the data sent by and returned to the client. 
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-asairs/d1ba7987-41bf-483d-9045-96dfe11e3d1c
+"""
+
 class airsyncbase_Type:             #http://msdn.microsoft.com/en-us/library/hh475675(v=exchg.80).aspx
     Plaintext = 1
     HTML =      2

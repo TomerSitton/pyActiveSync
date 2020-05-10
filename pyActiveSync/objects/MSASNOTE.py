@@ -19,6 +19,17 @@
 
 """[MS-ASNOTE] Note objects"""
 
+"""
+Exchange ActiveSync: Notes Class Protocol
+
+Specifies the Exchange ActiveSync: Notes Class Protocol, which synchronizes user notes with a server.
+
+
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-asnote/21801d6c-000e-413c-8591-50430a8e9fd9
+"""
+
+
 from .MSASEMAIL import airsyncbase_Body
 
 def parse_note(data):

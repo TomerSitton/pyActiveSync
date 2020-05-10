@@ -18,3 +18,14 @@
 ########################################################################
 
 """[MS-ASRM] Rights Management objects"""
+
+"""
+Exchange ActiveSync: Rights Management Protocol
+
+Specifies the Exchange ActiveSync: Rights Management Protocol, which specifies the actions allowed on an email 
+message and its attachments. 
+
+
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-asrm/71e681b7-e178-4c10-96b6-78df7fa77dfc
+"""

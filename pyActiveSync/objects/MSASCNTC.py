@@ -19,6 +19,14 @@
 
 """[MS-ASCNTC] Contact objects"""
 
+"""
+Exchange ActiveSync: Contact Class Protocol
+
+Specifies the Exchange ActiveSync: Contact Class Protocol, which is used for the interchange of contact data.
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-ascntc/a4593b9d-d9af-4d27-bc5c-67c4c1b98d54
+"""
+
 from .MSASEMAIL import airsyncbase_Body
 
 def parse_contact(data):

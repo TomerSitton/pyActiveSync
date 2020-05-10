@@ -19,6 +19,14 @@
 
 """[MS-ASCAL] Calendar objects"""
 
+"""
+Exchange ActiveSync: Calendar Class Protocol
+
+Specifies the Exchange ActiveSync: Calendar Class Protocol, which is used for the interchange of calendar data.
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-ascal/0c448682-4a6a-459a-ae66-2fed0712bef9
+"""
+
 from .MSASEMAIL import airsyncbase_Body
 
 def parse_calendar(data):

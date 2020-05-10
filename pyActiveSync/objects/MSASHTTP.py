@@ -17,6 +17,16 @@
 #  MA  02110-1301, USA.
 ########################################################################
 
+"""
+Exchange ActiveSync: HTTP Protocol
+
+Specifies the Exchange ActiveSync: HTTP Protocol, which enables a client device to synchronize data with the data
+that is stored on the server.
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-ashttp/4cbf28dc-2876-41c6-9d87-ba9db86cd40d
+"""
+
+
 import http.client, urllib.request, urllib.parse, urllib.error
 
 class ASHTTPConnector(object):

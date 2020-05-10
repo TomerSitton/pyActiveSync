@@ -19,6 +19,16 @@
 
 """[MS-ASCMD] Generic/various class namespace objects"""
 
+"""
+Exchange ActiveSync: Command Reference Protocol
+
+Specifies the Exchange ActiveSync: Command Reference Protocol, which enables the synchronization of email, 
+Short Message Service (SMS) messages, attachments, folders, contact information, meetings, calendar data, tasks, 
+notes, and documents. 
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-ascmd/1a3490f1-afe1-418a-aa92-6f630036d65a
+"""
+
 class FolderHierarchy:
     Status = {
                 "1": ( "Success.", "Server successfully completed command.", "None.", "Global" ),

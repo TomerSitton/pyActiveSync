@@ -19,6 +19,16 @@
 
 """[MS-ASDOC] Document objects"""
 
+"""
+Exchange ActiveSync: Document Class Protocol
+
+Specifies the Exchange ActiveSync: Document Class Protocol, which is used to communicate document data from the 
+server to the client 
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-asdoc/c503701c-0e59-4beb-9b8b-038cd69a3443
+"""
+
+
 @staticmethod
 def parse_document(data):
     document_dict = {}

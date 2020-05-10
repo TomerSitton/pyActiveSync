@@ -19,6 +19,15 @@
 
 """[MS-ASEMAIL] Email class namespace objects"""
 
+"""
+Exchange ActiveSync: Email Class Protocol
+
+Specifies the Exchange ActiveSync: Email Class Protocol, which provides an XML representation of email data that is 
+sent or received by mobile devices. 
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-asemail/f3d27369-e0f5-4164-aa5e-9b1abda16f5f
+"""
+
 from .MSASAIRS import airsyncbase_Type, airsyncbase_Body, airsyncbase_Attachment, airsyncbase_Attachments, airsyncbase_Method, airsyncbase_NativeBodyType, airsyncbase_BodyPart
 
 class email_Importance:

@@ -19,6 +19,15 @@
 
 """[MS-ASDTYPE] MS-AS data types objects"""
 
+"""
+Exchange ActiveSync: Data Types
+
+Specifies the Exchange ActiveSync data types that are used by the Exchange ActiveSync Protocol XML schema definitions 
+(XSDs).
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-asdtype/dcfe20e1-cb36-457f-8c7b-e5c61351f7d3
+"""
+
 class datatype_TimeZone:
     def get_local_timezone_bytes():
         #TODO
@@ -29,3 +38,7 @@ class datatype_TimeZone:
     class Timezones:
         GMT = 0
         #TODO
+
+class datatype_String:
+    pass
+    #TODO - handle byte array, email, telephone, timezone and compact Datetime

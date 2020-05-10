@@ -19,6 +19,15 @@
 
 """[MS-ASTASK] Task objects"""
 
+"""
+Exchange ActiveSync: Tasks Class Protocol
+
+Specifies the Exchange ActiveSync: Tasks Class Protocol, which is used for the interchange of task data.
+
+
+link - https://docs.microsoft.com/en-us/openspecs/exchange_server_protocols/ms-astask/b8fe2664-50ba-4d00-bf6b-e4deab352c89
+"""
+
 from .MSASEMAIL import airsyncbase_Body
 
 def parse_task(data):
