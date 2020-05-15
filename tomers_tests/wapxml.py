@@ -152,24 +152,26 @@ class wapxmlnode(object):
         :param tabs: the seperator between nodes and its children's representation
         :return: The string representation of the node and it's children
         """
-        if (self.text != None) or (self.cdata != None) or (len(self._children)>0):
+        if (self.text is not None) or (self.cdata is not None) or (len(self._children) > 0):
             inner_text = ""
-            if self.text != None:
-                inner_text+=str(self.text)
-            if self.cdata != None:
-                inner_text+= "<![CDATA[%s]]>" % str(self.cdata)
+            if self.text is not None:
+                inner_text += str(self.text)
+            if self.cdata is not None:
+                inner_text += "<![CDATA[{cdata}]]>".format(cdata=str(self.cdata))
             if self.has_children():
                 for child in self._children:
-                    inner_text+=child.__repr__(tabs+"  ")
+                    inner_text += child.__repr__(tabs+"  ")
             if not self._is_root:
                 end_tabs = ""
-                if self.has_children(): end_tabs = "\r\n"+tabs
-                return "\r\n%s<%s>%s%s</%s>" % (tabs, self.tag, inner_text, end_tabs, self.tag)
-            else: return  "\r\n<%s xmlns=\"%s:\">%s\r\n</%s>" % (self.tag, self._xmlns, inner_text, self.tag)
+                if self.has_children():
+                    end_tabs = "\r\n"+tabs
+                return "\r\n{tabs}<{tag}>{text}{end_tabs}</{tag}>".format(tabs=tabs, tag=self.tag, text=inner_text, end_tabs=end_tabs)
+            else:
+                return "\r\n<{tag} xmlns=\"{xmlns}:\">{text}\r\n</{tag}>".format(tag=self.tag, xmlns=self._xmlns, text=inner_text)
         elif self._is_root:
-            return "\r\n<%s xmlns=\"%s:\"></%s>" % (self.tag, self._xmlns, self.tag)
+            return "\r\n<{tag} xmlns=\"{xmlns}:\"></{tag}>".format(tag=self.tag, xmlns=self._xmlns)
         else:
-            return "%s<%s />" % (tabs, self.tag)
+            return "{tabs}<{tag} />".format(tabs=tabs, tag=self.tag)
 
     def __iter__(self):
         if len(self._children) > 0:
