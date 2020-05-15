@@ -270,6 +270,14 @@ class storage:
 
     @staticmethod
     def update_folderhierarchy(changes, path="pyas.asdb"):
+        """
+        :param changes: list of tuples of command and objects.
+                        for example:
+                        [('ADD', <objects.MSASCMD.FolderHierarchy.Folder object>),
+                        ('ADD', <objects.MSASCMD.FolderHierarchy.Folder object>)]
+        :param path:
+        :return:
+        """
         conn = sqlite3.connect(path)
         curs = conn.cursor()
         for change in changes:
@@ -436,6 +444,16 @@ class storage:
 
     @staticmethod
     def get_synckeys_dict(curs, path="pyas.asdb"):
+        """
+        This function returns a dictionary which its keys are the collection_ids and its
+        values are the collections' synckey.
+        for example:
+        {'0': '1', '9': '696602903', '15': '1148150257', '2': '1893202198', '5': '1845584800', '12': '980326785'}
+        :param curs: the storage curs
+        :param path: the db path
+        :return: dict of collection_id to sync_key
+        :rtype: dict of str to str
+        """
         conn = sqlite3.connect(path)
         curs = conn.cursor()
         curs.execute("SELECT * FROM SyncKeys")

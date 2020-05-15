@@ -38,28 +38,34 @@ class Sync:
             self.Responses = None
 
     @staticmethod
-    def build(synckeys, collections):
+    def build(collection_to_synckeys_dict, collections_to_params_dict):
+        """
+        builds the xml sync request
+        :param collection_to_synckeys_dict: dict of collection_id to synckeys
+        :param collections_to_params_dict: dict of collection_id to other optional parameters (like "options")
+        :return: the xml request
+        """
         as_sync_xmldoc_req = wapxmltree()
         xml_as_sync_rootnode = wapxmlnode("Sync")
         as_sync_xmldoc_req.set_root(xml_as_sync_rootnode, "airsync")
 
         xml_as_collections_node = wapxmlnode("Collections", xml_as_sync_rootnode)
 
-        for collection_id in list(collections.keys()):
+        for collection_id in list(collections_to_params_dict.keys()):
             xml_as_Collection_node = wapxmlnode("Collection", xml_as_collections_node)  #http://msdn.microsoft.com/en-us/library/gg650891(v=exchg.80).aspx
             try:
-                xml_as_SyncKey_node = wapxmlnode("SyncKey", xml_as_Collection_node, synckeys[collection_id])    #http://msdn.microsoft.com/en-us/library/gg663426(v=exchg.80).aspx
+                xml_as_SyncKey_node = wapxmlnode("SyncKey", xml_as_Collection_node, collection_to_synckeys_dict[collection_id])    #http://msdn.microsoft.com/en-us/library/gg663426(v=exchg.80).aspx
             except KeyError:
                 xml_as_SyncKey_node = wapxmlnode("SyncKey", xml_as_Collection_node, "0")
                 
             xml_as_CollectionId_node = wapxmlnode("CollectionId", xml_as_Collection_node, collection_id) #http://msdn.microsoft.com/en-us/library/gg650886(v=exchg.80).aspx
 
-            for parameter in list(collections[collection_id].keys()):
+            for parameter in list(collections_to_params_dict[collection_id].keys()):
                 if parameter == "Options":
                     xml_as_Options_node = wapxmlnode(parameter, xml_as_Collection_node)
-                    for option_parameter in list(collections[collection_id][parameter].keys()):
+                    for option_parameter in list(collections_to_params_dict[collection_id][parameter].keys()):
                         if option_parameter.startswith("airsync"):
-                            for airsyncpref_node in collections[collection_id][parameter][option_parameter]:
+                            for airsyncpref_node in collections_to_params_dict[collection_id][parameter][option_parameter]:
                                 xml_as_Options_airsyncpref_node = wapxmlnode(option_parameter.replace("_",":"), xml_as_Options_node)
                                 wapxmlnode("airsyncbase:Type", xml_as_Options_airsyncpref_node, airsyncpref_node["Type"])
                                 tmp = airsyncpref_node["Type"]
@@ -68,11 +74,11 @@ class Sync:
                                     wapxmlnode("airsyncbase:%s" % airsyncpref_parameter, xml_as_Options_airsyncpref_node, airsyncpref_node[airsyncpref_parameter])
                                 airsyncpref_node["Type"] = tmp
                         elif option_parameter.startswith("rm"):
-                            wapxmlnode(option_parameter.replace("_",":"), xml_as_Options_node, collections[collection_id][parameter][option_parameter])
+                            wapxmlnode(option_parameter.replace("_",":"), xml_as_Options_node, collections_to_params_dict[collection_id][parameter][option_parameter])
                         else:
-                            wapxmlnode(option_parameter, xml_as_Options_node, collections[collection_id][parameter][option_parameter])
+                            wapxmlnode(option_parameter, xml_as_Options_node, collections_to_params_dict[collection_id][parameter][option_parameter])
                 else:
-                    wapxmlnode(parameter, xml_as_Collection_node, collections[collection_id][parameter])
+                    wapxmlnode(parameter, xml_as_Collection_node, collections_to_params_dict[collection_id][parameter])
         return as_sync_xmldoc_req
 
     @staticmethod
@@ -124,7 +130,12 @@ class Sync:
 
     @staticmethod
     def parse(wapxml, collectionid_to_type_dict = None):
-
+        """
+        returns a list of sync_response_collection objects representing the SYNC response data for each collection
+        :param wapxml:
+        :param collectionid_to_type_dict:
+        :return:
+        """
         namespace = "airsync"
         root_tag = "Sync"
 

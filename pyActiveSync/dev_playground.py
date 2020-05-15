@@ -39,7 +39,7 @@ from objects.MSASAIRS import airsync_FilterType, airsync_Conflict, airsync_MIMET
 
 
 as_server = 'outlook.office365.com'
-as_user = 'LaryQueen@LaryKing.onmicrosoft.com'
+as_user = 'LaryKing@LaryKing.onmicrosoft.com'
 as_pass = 'Lary2000'
 
 pyver = sys.version_info
@@ -418,13 +418,13 @@ sync(collections)
 
 #Ping (push), GetItemsEstimate and Sync process test
 #Ping
-#ping_xmldoc_req = Ping.build("120", [(INBOX, "Email"),(SENT_ITEMS, "Email"),(CALENDAR,"Calendar"),(CONTACTS,"Contacts"),(SUGGESTED_CONTACTS, "Contacts"),(NOTES, "Notes"),(TASKS, "Tasks")])
+ping_xmldoc_req = Ping.build("120", [(INBOX, "Email"),(SENT_ITEMS, "Email"),(CALENDAR,"Calendar"),(CONTACTS,"Contacts"),(SUGGESTED_CONTACTS, "Contacts"),(NOTES, "Notes"),(TASKS, "Tasks")])
 
-#ping_xmldoc_req = Ping.build("120", [(INBOX, "Email"),(SENT_ITEMS, "Email"),(CALENDAR,"Calendar"),(CONTACTS,"Contacts"),(NOTES, "Notes"),(TASKS, "Tasks")])
-#ping_xmldoc_res = as_request("Ping", ping_xmldoc_req)
-#ping_res = Ping.parse(ping_xmldoc_res)
-#if ping_res[0] == "2": #2=New changes available
-#    sync(ping_res[3])
+ping_xmldoc_req = Ping.build("120", [(INBOX, "Email"),(SENT_ITEMS, "Email"),(CALENDAR,"Calendar"),(CONTACTS,"Contacts"),(NOTES, "Notes"),(TASKS, "Tasks")])
+ping_xmldoc_res = as_request("Ping", ping_xmldoc_req)
+ping_res = Ping.parse(ping_xmldoc_res)
+if ping_res[0] == "2": #2=New changes available
+    sync(ping_res[3])
 
 
 if storage.close_conn_curs(conn):
