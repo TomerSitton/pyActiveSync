@@ -28,7 +28,7 @@ class ItemOps:
     SoftDelete = 3
 
 
-class storage:
+class Storage:
 
     def __init__(self, path="pyas.asdb", force_create=False):
         """
@@ -40,11 +40,21 @@ class storage:
         :param force_create: force the creation of a new db, even if there is already one.
         :type force_create: bool
         """
-        self.conn = sqlite3.connect(path)
-        self.curs = self.conn.cursor()
 
-        if force_create or not os.path.isfile(path):
+        if not os.path.isfile(path):
+            self.conn = sqlite3.connect(path)
+            self.curs = self.conn.cursor()
             self.create_db(path)
+        elif force_create:
+            os.remove(path)
+            self.conn = sqlite3.connect(path)
+            self.curs = self.conn.cursor()
+            self.create_db(path)
+        else:
+            self.conn = sqlite3.connect(path)
+            self.curs = self.conn.cursor()
+
+
 
     def create_db(self, path):
         """
@@ -155,7 +165,7 @@ class storage:
         self.curs.execute(sql)
         self.conn.commit()
 
-    def get_keyvalue(self, key, path="pyas.asdb"):
+    def get_keyvalue(self, key):
         self.curs.execute("SELECT Value FROM KeyValue WHERE Key='%s'" % key)
         try:
             value = self.curs.fetchone()[0]
@@ -259,15 +269,15 @@ class storage:
         for collection in collections:
             for command in collection.Commands:
                 if command[0] == "Add":
-                    storage.item_operation(storage.ItemOps.Insert, command[1][1], command[1][0])
+                    self.item_operation(ItemOps.Insert, command[1][1], command[1][0])
                 if command[0] == "Delete":
-                    storage.item_operation(storage.ItemOps.Delete, command[1][1], command[1][0])
+                    self.item_operation(ItemOps.Delete, command[1][1], command[1][0])
                 elif command[0] == "Change":
-                    storage.item_operation(storage.ItemOps.Update, command[1][1], command[1][0])
+                    self.item_operation(ItemOps.Update, command[1][1], command[1][0])
                 elif command[0] == "SoftDelete":
-                    storage.item_operation(storage.ItemOps.SoftDelete, command[1][1], command[1][0])
+                    self.item_operation(ItemOps.SoftDelete, command[1][1], command[1][0])
             if collection.SyncKey > 1:
-                storage.update_synckey(collection.SyncKey, collection.CollectionId)
+                self.update_synckey(collection.SyncKey, collection.CollectionId)
                 self.conn.commit()
             else:
                 raise AttributeError("SyncKey incorrect")
@@ -335,6 +345,14 @@ class storage:
             raise LookupError("No folders found in FolderHierarchy table. Did you run a FolderSync yet?")
         return folders_dict
 
+    def close(self):
+        try:
+            self.conn.close()
+        except:
+            return False
+        return True
+
+
 
 
 #   @staticmethod
@@ -344,10 +362,3 @@ class storage:
 #        storage.update_keyvalue("MID", mid)
 #        return mid
 
-#    @staticmethod
-#   def close_conn_curs(conn):
-#      try:
-#         conn.close()
-#    except:
-#       return False
-#  return True
